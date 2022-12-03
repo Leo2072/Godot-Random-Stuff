@@ -1,0 +1,130 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Platformer/CharacterController.gd" type="Script" id=1]
+[ext_resource path="res://Platformer/KinematicBody2D.gd" type="Script" id=2]
+[ext_resource path="res://Platformer/Showcase.gd" type="Script" id=3]
+[ext_resource path="res://Platformer/novem___.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Staircase.png" type="Texture" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 200, 10 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=6]
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 4 )
+
+[sub_resource type="CircleShape2D" id=2]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 400, 10 )
+
+[node name="Sprite" type="Sprite"]
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 9000, 9000 )
+
+[node name="CharacterPlatform" type="KinematicBody2D" parent="."]
+position = Vector2( 442, 348 )
+motion/sync_to_physics = true
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterPlatform"]
+position = Vector2( 5, 6 )
+rotation = -0.453786
+shape = SubResource( 1 )
+
+[node name="LowerStaircase1" type="Sprite" parent="CharacterPlatform"]
+position = Vector2( 77, -38 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="LowerStairsCollider1" type="CollisionPolygon2D" parent="CharacterPlatform"]
+visible = false
+position = Vector2( 77, -38 )
+scale = Vector2( 2, 2 )
+polygon = PoolVector2Array( 32, -14.8, 31.2, -14.8, 31.2, -10.8, 24.8, -10.8, 24.8, -11.8, 24.2, -11.8, 24.2, -10.8, 23.2, -10.8, 23.2, -6.8, 16.8, -6.8, 16.8, -7.8, 16.2, -7.8, 16.2, -6.8, 15.2, -6.8, 15.2, -2.8, 8.8, -2.8, 8.8, -3.8, 8.2, -3.8, 8.2, -2.8, 7.2, -2.8, 7.2, 1.2, 0.799999, 1.2, 0.799999, 0.200001, 0.200001, 0.200001, 0.200001, 1.2, -0.799999, 1.2, -0.799999, 5.2, -7.2, 5.2, -7.2, 4.2, -7.8, 4.2, -7.8, 5.2, -8.8, 5.2, -8.8, 9.2, -15.2, 9.2, -15.2, 8.2, -15.8, 8.2, -15.8, 9.2, -16.8, 9.2, -16.8, 13.2, -23.2, 13.2, -23.2, 12.2, -23.8, 12.2, -23.8, 13.2, -24.8, 13.2, -24.8, 17.2, -31.2, 17.2, -31.2, 16.2, -32, 16.2, -32, 13.8, -31.2, 13.8, -31.2, 11.2, -32, 11.2, -32, 9.8, -23.2, 9.8, -23.2, 7.2, -24.2, 7.2, -24.2, 5.8, -15.2, 5.8, -15.2, 3.2, -16.2, 3.2, -16.2, 1.8, -7.2, 1.8, -7.2, -0.799999, -8.2, -0.799999, -8.2, -2.2, 0.799999, -2.2, 0.799999, -4.8, -0.200001, -4.8, -0.200001, -6.2, 8.8, -6.2, 8.8, -8.8, 7.8, -8.8, 7.8, -10.2, 16.8, -10.2, 16.8, -12.8, 15.8, -12.8, 15.8, -14.2, 24.8, -14.2, 24.8, -16.8, 23.8, -16.8, 23.8, -18, 32, -18 )
+
+[node name="LowerStaircase2" type="Sprite" parent="CharacterPlatform"]
+position = Vector2( 205, -102 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="LowerStairsCollider2" type="CollisionPolygon2D" parent="CharacterPlatform"]
+visible = false
+position = Vector2( 205, -102 )
+scale = Vector2( 2, 2 )
+polygon = PoolVector2Array( 32, -14.8, 31.2, -14.8, 31.2, -10.8, 24.8, -10.8, 24.8, -11.8, 24.2, -11.8, 24.2, -10.8, 23.2, -10.8, 23.2, -6.8, 16.8, -6.8, 16.8, -7.8, 16.2, -7.8, 16.2, -6.8, 15.2, -6.8, 15.2, -2.8, 8.8, -2.8, 8.8, -3.8, 8.2, -3.8, 8.2, -2.8, 7.2, -2.8, 7.2, 1.2, 0.799999, 1.2, 0.799999, 0.200001, 0.200001, 0.200001, 0.200001, 1.2, -0.799999, 1.2, -0.799999, 5.2, -7.2, 5.2, -7.2, 4.2, -7.8, 4.2, -7.8, 5.2, -8.8, 5.2, -8.8, 9.2, -15.2, 9.2, -15.2, 8.2, -15.8, 8.2, -15.8, 9.2, -16.8, 9.2, -16.8, 13.2, -23.2, 13.2, -23.2, 12.2, -23.8, 12.2, -23.8, 13.2, -24.8, 13.2, -24.8, 17.2, -31.2, 17.2, -31.2, 16.2, -32, 16.2, -32, 13.8, -31.2, 13.8, -31.2, 11.2, -32, 11.2, -32, 9.8, -23.2, 9.8, -23.2, 7.2, -24.2, 7.2, -24.2, 5.8, -15.2, 5.8, -15.2, 3.2, -16.2, 3.2, -16.2, 1.8, -7.2, 1.8, -7.2, -0.799999, -8.2, -0.799999, -8.2, -2.2, 0.799999, -2.2, 0.799999, -4.8, -0.200001, -4.8, -0.200001, -6.2, 8.8, -6.2, 8.8, -8.8, 7.8, -8.8, 7.8, -10.2, 16.8, -10.2, 16.8, -12.8, 15.8, -12.8, 15.8, -14.2, 24.8, -14.2, 24.8, -16.8, 23.8, -16.8, 23.8, -18, 32, -18 )
+
+[node name="UpperStaircase1" type="Sprite" parent="CharacterPlatform"]
+position = Vector2( 77, -98 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="UpperStairsCollider1" type="CollisionPolygon2D" parent="CharacterPlatform"]
+visible = false
+position = Vector2( 77, -98 )
+scale = Vector2( 2, 2 )
+polygon = PoolVector2Array( 32, -14.8, 31.2, -14.8, 31.2, -10.8, 24.8, -10.8, 24.8, -11.8, 24.2, -11.8, 24.2, -10.8, 23.2, -10.8, 23.2, -6.8, 16.8, -6.8, 16.8, -7.8, 16.2, -7.8, 16.2, -6.8, 15.2, -6.8, 15.2, -2.8, 8.8, -2.8, 8.8, -3.8, 8.2, -3.8, 8.2, -2.8, 7.2, -2.8, 7.2, 1.2, 0.799999, 1.2, 0.799999, 0.200001, 0.200001, 0.200001, 0.200001, 1.2, -0.799999, 1.2, -0.799999, 5.2, -7.2, 5.2, -7.2, 4.2, -7.8, 4.2, -7.8, 5.2, -8.8, 5.2, -8.8, 9.2, -15.2, 9.2, -15.2, 8.2, -15.8, 8.2, -15.8, 9.2, -16.8, 9.2, -16.8, 13.2, -23.2, 13.2, -23.2, 12.2, -23.8, 12.2, -23.8, 13.2, -24.8, 13.2, -24.8, 17.2, -31.2, 17.2, -31.2, 16.2, -32, 16.2, -32, 13.8, -31.2, 13.8, -31.2, 11.2, -32, 11.2, -32, 9.8, -23.2, 9.8, -23.2, 7.2, -24.2, 7.2, -24.2, 5.8, -15.2, 5.8, -15.2, 3.2, -16.2, 3.2, -16.2, 1.8, -7.2, 1.8, -7.2, -0.799999, -8.2, -0.799999, -8.2, -2.2, 0.799999, -2.2, 0.799999, -4.8, -0.200001, -4.8, -0.200001, -6.2, 8.8, -6.2, 8.8, -8.8, 7.8, -8.8, 7.8, -10.2, 16.8, -10.2, 16.8, -12.8, 15.8, -12.8, 15.8, -14.2, 24.8, -14.2, 24.8, -16.8, 23.8, -16.8, 23.8, -18, 32, -18 )
+
+[node name="UpperStaircase2" type="Sprite" parent="CharacterPlatform"]
+position = Vector2( 205, -162 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="UpperStairsCollider2" type="CollisionPolygon2D" parent="CharacterPlatform"]
+visible = false
+position = Vector2( 205, -162 )
+scale = Vector2( 2, 2 )
+polygon = PoolVector2Array( 32, -14.8, 31.2, -14.8, 31.2, -10.8, 24.8, -10.8, 24.8, -11.8, 24.2, -11.8, 24.2, -10.8, 23.2, -10.8, 23.2, -6.8, 16.8, -6.8, 16.8, -7.8, 16.2, -7.8, 16.2, -6.8, 15.2, -6.8, 15.2, -2.8, 8.8, -2.8, 8.8, -3.8, 8.2, -3.8, 8.2, -2.8, 7.2, -2.8, 7.2, 1.2, 0.799999, 1.2, 0.799999, 0.200001, 0.200001, 0.200001, 0.200001, 1.2, -0.799999, 1.2, -0.799999, 5.2, -7.2, 5.2, -7.2, 4.2, -7.8, 4.2, -7.8, 5.2, -8.8, 5.2, -8.8, 9.2, -15.2, 9.2, -15.2, 8.2, -15.8, 8.2, -15.8, 9.2, -16.8, 9.2, -16.8, 13.2, -23.2, 13.2, -23.2, 12.2, -23.8, 12.2, -23.8, 13.2, -24.8, 13.2, -24.8, 17.2, -31.2, 17.2, -31.2, 16.2, -32, 16.2, -32, 13.8, -31.2, 13.8, -31.2, 11.2, -32, 11.2, -32, 9.8, -23.2, 9.8, -23.2, 7.2, -24.2, 7.2, -24.2, 5.8, -15.2, 5.8, -15.2, 3.2, -16.2, 3.2, -16.2, 1.8, -7.2, 1.8, -7.2, -0.799999, -8.2, -0.799999, -8.2, -2.2, 0.799999, -2.2, 0.799999, -4.8, -0.200001, -4.8, -0.200001, -6.2, 8.8, -6.2, 8.8, -8.8, 7.8, -8.8, 7.8, -10.2, 16.8, -10.2, 16.8, -12.8, 15.8, -12.8, 15.8, -14.2, 24.8, -14.2, 24.8, -16.8, 23.8, -16.8, 23.8, -18, 32, -18 )
+
+[node name="Character" type="KinematicBody2D" parent="."]
+position = Vector2( 442, 325 )
+moving_platform_apply_velocity_on_leave = 2
+script = ExtResource( 1 )
+SnapLength = 10.0
+StairStepHeight = 10.0
+font = SubResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Character"]
+shape = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="Character"]
+current = true
+
+[node name="KinematicPlatform" type="KinematicBody2D" parent="."]
+position = Vector2( 442, 550 )
+rotation = 0.349066
+collision_layer = 2
+collision_mask = 2
+motion/sync_to_physics = true
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicPlatform"]
+shape = SubResource( 1 )
+
+[node name="KinematicBody" type="KinematicBody2D" parent="."]
+position = Vector2( 442, 520 )
+collision_layer = 2
+collision_mask = 2
+script = ExtResource( 3 )
+vel = Vector2( 0, 0 )
+font = SubResource( 4 )
+SnapVector = Vector2( 9000, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody"]
+shape = SubResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="KinematicBody"]
+
+[node name="CollidingPlatform" type="KinematicBody2D" parent="."]
+position = Vector2( 3000, 400 )
+rotation = -0.698132
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollidingPlatform"]
+shape = SubResource( 3 )
