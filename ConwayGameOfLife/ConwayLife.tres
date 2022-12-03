@@ -1,0 +1,48 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+uniform bool active = false;
+
+
+void fragment()
+{
+	COLOR = texture(TEXTURE, UV);
+	if (active)
+	{
+		vec2 PixelToUV = TEXTURE_PIXEL_SIZE;
+		vec4 TL = texture(TEXTURE, UV - PixelToUV);
+		vec4 TM = texture(TEXTURE, UV - vec2(0.0, PixelToUV.y));
+		vec4 TR = texture(TEXTURE, UV + vec2(PixelToUV.x, -PixelToUV.y));
+		vec4 L = texture(TEXTURE, UV - vec2(PixelToUV.x, 0.0));
+		vec4 R = texture(TEXTURE, UV + vec2(PixelToUV.x, 0.0));
+		vec4 BL = texture(TEXTURE, UV + vec2(-PixelToUV.x, PixelToUV.y));
+		vec4 BM = texture(TEXTURE, UV + vec2(0.0, PixelToUV.y));
+		vec4 BR = texture(TEXTURE, UV + PixelToUV);
+		int lit = 0;
+		bvec3 IsEqual = equal(TL.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(TM.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(TR.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(L.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(R.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(BL.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(BM.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		IsEqual = equal(BR.rgb, vec3(1.0));
+		if (IsEqual.x && IsEqual.y && IsEqual.z) { lit += 1; }
+		if (lit < 2 || lit > 3)
+		{
+			COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+		}
+		else if (lit == 3)
+		{
+			COLOR = vec4 (1.0, 1.0, 1.0, 1.0);
+		}
+	}
+}"

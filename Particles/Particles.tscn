@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Particles/Particles.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type particles;
+
+uniform vec2 LeftUpperBound;
+uniform vec2 RightLowerBound;
+uniform vec2 ParticleVelocity;
+
+void vertex()
+{
+	if (RESTART)
+	{
+		VELOCITY = vec3(float(int(RANDOM_SEED) % 200) - 100.0 + 50.0 * cos(TIME), float(int(RANDOM_SEED) % 200) - 100.0 + 50.0 * sin(TIME), 0.0);
+	}
+	if ((TRANSFORM[3].x >= RightLowerBound.x && VELOCITY.x > 0.0) || (TRANSFORM[3].x <= LeftUpperBound.x && VELOCITY.x < 0.0))
+	{
+		VELOCITY.x *= -1.0;
+	}
+	if ((TRANSFORM[3].y >= RightLowerBound.y && VELOCITY.y > 0.0) || (TRANSFORM[3].y <= LeftUpperBound.y && VELOCITY.y < 0.0))
+	{
+		VELOCITY.y *= -1.0;
+	}
+	COLOR.a -= DELTA / LIFETIME;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/LeftUpperBound = Vector2( -100, -100 )
+shader_param/RightLowerBound = Vector2( 100, 100 )
+shader_param/ParticleVelocity = Vector2( 200, 200 )
+
+[node name="Particles2D" type="Particles2D"]
+position = Vector2( 500, 250 )
+amount = 100
+lifetime = 10.0
+process_material = SubResource( 2 )
+script = ExtResource( 1 )

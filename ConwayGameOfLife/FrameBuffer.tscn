@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ConwayGameOfLife/FrameBuffer.gd" type="Script" id=1]
+[ext_resource path="res://ConwayGameOfLife/ConwayLife.tres" type="Shader" id=2]
+[ext_resource path="res://ConwayGameOfLife/Untitled.png" type="Texture" id=3]
+[ext_resource path="res://ConwayGameOfLife/CameraMover2D.gd" type="Script" id=4]
+
+[sub_resource type="ViewportTexture" id=5]
+flags = 3
+viewport_path = NodePath("BufferViewport")
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
+shader_param/active = true
+
+[sub_resource type="ViewportTexture" id=4]
+viewport_path = NodePath("Viewport")
+
+[node name="Display" type="Sprite"]
+texture = SubResource( 5 )
+centered = false
+flip_v = true
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 1024, 600 )
+transparent_bg = true
+hdr = false
+usage = 0
+render_target_update_mode = 3
+
+[node name="Sprite" type="Sprite" parent="Viewport"]
+material = SubResource( 2 )
+texture = ExtResource( 3 )
+centered = false
+script = ExtResource( 1 )
+BufferPath = NodePath("../../BufferViewport")
+TextDisplayPath = NodePath("../../Label")
+DisplayPath = NodePath("../..")
+
+[node name="BufferViewport" type="Viewport" parent="."]
+size = Vector2( 1024, 600 )
+transparent_bg = true
+render_target_update_mode = 3
+
+[node name="BufferSprite" type="Sprite" parent="BufferViewport"]
+texture = SubResource( 4 )
+centered = false
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 0.392157, 1, 0.392157, 1 )
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 200.0
+margin_bottom = 50.0
+text = "Draw Radius: 1"
+valign = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 512, 300 )
+current = true
+script = ExtResource( 4 )
