@@ -1,9 +1,6 @@
 extends KinematicBody2D
 
 
-#To do: create a snap function. The safe margin can sometimes separate the player from the platform too much.
-#This messes up things from PlatformVelocity to OnFloor checks.
-#It can somewhat be fixed by snapping the player back to the floor when they are separated too much by the margin.
 
 
 func _ready() -> void:
@@ -127,8 +124,8 @@ MaxStepHeight: float = 6, StepCheckCount: int = 1, slides: int = 4) -> Vector2:
 #If not, that means the object is moving away from the surface locally.
 			if col.normal.dot(LocalVelocity) < 0:
 #If the Player is moving on a floor and hits a wall perpendicular to the DownDirection, check if it's a stair step.
-				if OnFloor or WasOnFloor and is_equal_approx(col.normal.dot(DownDirection), 0):
-					var StepHeight = GetStepHeight(LocalVelocity, DownDirection, MaxStepHeight/StepCheckCount, StepCheckCount);
+				if (OnFloor or WasOnFloor) and is_equal_approx(col.normal.dot(DownDirection), 0):
+					var StepHeight = GetStepHeight(move, DownDirection, MaxStepHeight/StepCheckCount, StepCheckCount);
 #If the step is too high, treat it as a wall. Otherwise, teleport the Player up to the step's height and continue the move.
 #Do note that if in the weird case where the height is exactly 0,
 #(For whatever reasons - a collision shouldn't have even happened in such a case!)
@@ -200,18 +197,18 @@ MaxStepHeight: float = 6, StepCheckCount: int = 1, slides: int = 4) -> Vector2:
 #The smaller the StepCheckHeight, the more accurate the check will be.
 #However, the Player will only be able to cross over steps with height less than or equal to StepCheckHeight * CheckCount.
 #The greater the CheckCount, the more collision checks there will be.
-#If the Player cannot cross over the step (it's a wall - or a very game-breakingly sharp spike), INF will be returned.
-func GetStepHeight(LocalVelocity: Vector2, DownDirection: Vector2 = Vector2(0, 1),
+#If the Player cannot cross over the step (it's a wall - or a very weird/complex-looking step), INF will be returned.
+func GetStepHeight(motion: Vector2, DownDirection: Vector2 = Vector2(0, 1),
 StepCheckHeight: float = 0.5, CheckCount: int = 1) -> float:
 	var col: KinematicCollision2D;
-	var motion: Vector2;
+	var CastUp: Vector2 = -DownDirection * StepCheckHeight;
+	var CastSide: Vector2 = motion.slide(DownDirection).normalized() * 0.1;
 	var OriginalPosition: Vector2 = global_position;
 	var height: float = INF;
 	var VerticalMove: float = 0;
 	for _StepCount in range(0, CheckCount):
 #Cast up, check if a ceiling is hit.
-		motion = -DownDirection * StepCheckHeight;
-		col = move_and_collide(motion, true, true, true);
+		col = move_and_collide(CastUp, true, true, true);
 #If yes, the Player can no longer move up and this will be the last StepCheck, so break at the end.
 		if col:
 #Temporarily move the Player along the cast to continue the next checks.
@@ -219,39 +216,42 @@ StepCheckHeight: float = 0.5, CheckCount: int = 1) -> float:
 #Record the height that has been travelled, add it to the height travelled in previous steps.
 			VerticalMove += col.travel.length();
 #Cast in the direction perpendicular to DownDirection so the Player just barely move into/onto the step.
-			motion = LocalVelocity.slide(DownDirection).normalized() * 0.1;
-			col = move_and_collide(motion, true, true, true);
-#If a collision happens, that means this is a wall the Player cannot pass. If not, it's a stair step that can be climbed.
+			col = move_and_collide(CastSide, true, true, true);
+#If the move is impossible, that means this is a wall the Player cannot pass. If not, it's a stair step that can be climbed.
+#For the move to be possible, either there must be no collisions, or the travelled length must be sufficiently large.
 			if col == null:
 #Temporarily move the Player along the cast so they are on the step.
-				global_position += motion;
+				global_position += CastSide;
 #Cast down by the height that has been travelled to see how high the Player is compared to the step.
 #This is the unnecessary height component.
-				motion = DownDirection * VerticalMove;
-				col = move_and_collide(motion, true, true, true);
+				col = move_and_collide(DownDirection * VerticalMove, true, true, true);
 #The remaining height is the actual height of the step (give or take the safe margin because of how move_and_collide works).
 #Ideally, there should always be a collision unless some weird stuff I hadn't accounted for happens.
 #However, just in case there aren't the VerticalMove should always be high enough to make the Player step through.
 				if col: height = col.remainder.length();
 				else: height = VerticalMove;
+#Do note that because move_and_collide automatically separates the Player using the safe margin,
+#They will always be a bit away from the step, so the travelled length will always be at least equal to the safe margin.
+			elif col.travel.length() > get_safe_margin():
+				global_position += col.travel;
+				col = move_and_collide(DownDirection * VerticalMove, true, true, true);
+				if col: height = col.remainder.length();
+				else: height = VerticalMove;
 			break;
 #If not, the Player might still be able to move up, so only break when the step's height is determined.
 		else:
-#Temporarily move the Player along the cast to continue the next checks.
-			global_position += motion;
-#Record the height that has been travelled, add it to the height travelled in previous steps.
+			global_position += CastUp;
 			VerticalMove += StepCheckHeight;
-#Cast in the direction perpendicular to DownDirection so the Player just barely move into/onto the step.
-			motion = LocalVelocity.slide(DownDirection).normalized() * 0.1;
-			col = move_and_collide(motion, true, true, true);
-#If a collision happens, that means this is a wall the Player cannot pass. If not, it's a stair step that can be climbed.
+			col = move_and_collide(CastSide, true, true, true);
 			if col == null:
-#Temporarily move the Player along the cast so they are on the step.
-				global_position += motion;
-				motion = DownDirection * VerticalMove;
-				col = move_and_collide(motion, true, true, true);
-#The remaining height is the actual height of the step (give or take the safe margin because of how move_and_collide works).
-#Again, Just in case there aren't any collisions, the VerticalMove should be high enough to make the Player step through.
+				global_position += CastSide;
+				col = move_and_collide(DownDirection * VerticalMove, true, true, true);
+				if col: height = col.remainder.length();
+				else: height = VerticalMove;
+				break;
+			elif col.travel.length() > get_safe_margin():
+				global_position += col.travel;
+				col = move_and_collide(DownDirection * VerticalMove, true, true, true);
 				if col: height = col.remainder.length();
 				else: height = VerticalMove;
 				break;
